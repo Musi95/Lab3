@@ -13,6 +13,8 @@ import java.util.Map;
  */
 public class CountryCodeConverter {
 
+    private Map<String, String> countryMap;
+    private int numCountries;
     // TODO Task: pick appropriate instance variable(s) to store the data necessary for this class
 
     /**
@@ -33,13 +35,20 @@ public class CountryCodeConverter {
         try {
             List<String> lines = Files.readAllLines(Paths.get(getClass()
                     .getClassLoader().getResource(filename).toURI()));
-
-            // TODO Task: use lines to populate the instance variable(s)
+            lines.remove(0);
+            this.countryMap = new HashMap<>();
+            this.numCountries = lines.size();
+            for (String line : lines) {
+                String[] parts = line.split("\t");
+                this.countryMap.put(parts[2].toLowerCase(), parts[0]);
+                this.countryMap.put(parts[0].toLowerCase(), parts[2]);
+            }
 
         }
         catch (IOException | URISyntaxException ex) {
             throw new RuntimeException(ex);
         }
+        System.out.println(this.countryMap.get("USA"));
 
     }
 
@@ -49,8 +58,7 @@ public class CountryCodeConverter {
      * @return the name of the country corresponding to the code
      */
     public String fromCountryCode(String code) {
-        // TODO Task: update this code to use an instance variable to return the correct value
-        return code;
+        return this.countryMap.get(code.toLowerCase());
     }
 
     /**
@@ -59,8 +67,7 @@ public class CountryCodeConverter {
      * @return the 3-letter code of the country
      */
     public String fromCountry(String country) {
-        // TODO Task: update this code to use an instance variable to return the correct value
-        return country;
+        return this.countryMap.get(country.toLowerCase());
     }
 
     /**
@@ -68,7 +75,6 @@ public class CountryCodeConverter {
      * @return how many countries are included in this code converter.
      */
     public int getNumCountries() {
-        // TODO Task: update this code to use an instance variable to return the correct value
-        return 0;
+        return this.numCountries;
     }
 }
